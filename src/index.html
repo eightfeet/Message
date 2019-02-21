@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Modal</title>
+</head>
+<body>
+    <div id="example">click me 创建Message</div>
+    <br /><br />
+</body>
+<script>
+    var newModal = new ___Message___({
+        // id: '1111', // 模板节点id 不传可自动生成id
+        // zIndex: 100, // modal的层级关系，默认100
+        // Animation: false, // 启用动画 默认true
+        closable: false, // 可关闭 默认true
+        // shouldCloseOnOverlayClick: true, // 点击背景层关闭弹窗 默认false
+        style: { // 定义modal样式 {overlay: 覆盖层, content: 内容区, close: 关闭按钮}
+           
+        }
+    });
+
+    var btn = document.getElementById('example');
+    var btnshow = document.getElementById('exampleshow');
+
+    function create(){ 
+        return newModal.create('这是一个message弹窗呢，请注意一下', true).then(function(){
+            console.log('do...');
+        });
+    }
+
+    btn.onclick = function(){
+        create();
+    }
+
+</script>
+</html>
