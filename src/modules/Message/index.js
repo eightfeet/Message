@@ -2,126 +2,134 @@
 import s from './Message.scss';
 import { onceTransitionEnd } from 'web-animation-club';
 import { createDom, removeDom } from '~/utils/htmlFactory.js';
+import { inlineStyle } from '~/utils/tools.js';
 
 class Message {
 	/**
 	 *Creates an instance of Modal.
 	 * @param { Object } data
-	 * @memberof Modal
+	 * @memberof Message
 	 */
 	constructor(data) {
 		const stamp = (new Date()).getTime();
 		const {
 			id,
 			zIndex,
-			style
+			style,
+			directionFrom,
+			top
 		} = data || {};
 
 		this.state = {
 			id: id || `modal${stamp}-${window.Math.floor(window.Math.random()*100)}`, // modalId 不传自动生成 modal + 时间戳 + 100以内的随机数
 			zIndex: zIndex || 100, // 层级
-			style: style || null // 基础样式
+			style: style || null, // 基础样式
+			directionFrom,
+			top
 		};
+
+		this.directionFromClass = directionFrom === 'top' ? s.messageshowbottom : s.messageshowtop;
 	}
+
 	/**
-	 * @description 创建弹窗
+	 * @description 创建message
 	 * @param {Object} elements {head: htmlDom, main: htmlDom, footer: htmlDom}
-	 * @param {Boolean} noRemoval 是否移除弹窗，noRemoval=true时点击关闭按钮仅隐藏当前弹窗而不移除当前弹窗Dom
-	 * @memberof Modal
+	 * @param {Boolean} noRemoval 是否移除message，noRemoval=true时点击关闭按钮仅隐藏当前message而不移除当前messageDom
+	 * @memberof Message
 	 */
-	create = (content, noRemoval, S) => {
+	create = (content, time, noRemoval) => {
 		console.log(noRemoval);
-		const { id } = this.state;
+		const { id, directionFrom, zIndex, style} = this.state;
+		const { wrap, main } = style || {};
 		let messageElement = document.getElementById(id);
 		if (messageElement) {
-			this.show();
+			this.show(content, time);
 			console.warn('已创建message时 message.create === message.show');
 			return Promise.resolve();
 		}
-		return createDom(`<div class="${s.message}">
-                ${content}
+		return createDom(`<div class="${s.message}" style="${directionFrom === 'bottom' ? 'bottom' : 'top'}: 30px; ${inlineStyle(wrap)||''}">
+				<div class="${s.messagecontent}" style="${inlineStyle(main)||''} z-index: ${zIndex ? zIndex : 10000}; position: static;">
+					${content}
+				</div>
             </div>`, id)
 			.then(() => {
 				messageElement = document.getElementById(id);
 				const boxElement = messageElement.querySelector(`.${s.message}`);
-				return new Promise(resolve => {
-					window.setTimeout(() => {
-						boxElement.classList.add(s.messageshow);
-						resolve(boxElement);
-					}, 10);
-				});
-			})
-			.then(boxElement => onceTransitionEnd(boxElement))
-			.then(res => new Promise(resolve => {
-				window.setTimeout(() => {
-					res.target.classList.add(s.messageshow);
-					resolve(res);
-				}, S || 3000);
-			}))
-			.then(res => {
-				res.target.classList.remove(s.messageshow);
-			});
+				return this.animateAction(boxElement, time);
+			}).then(() => this.hide(noRemoval));
 	}
-	/**
-	 *
-	 * @description 移除弹窗
-	 * @memberof Modal
-	 */
-	remove = () => new Promise((resolve) => {
-		const modalElement = document.getElementById(this.state.id);
-		const wrapElement = modalElement.querySelector(`.${s.cove}`);
-		wrapElement.classList.remove(s.coveshow);
-		resolve(wrapElement);
+
+	animateAction = (element, time) => new Promise(resolve => {
+		window.setTimeout(() => {
+			element.classList.add(this.directionFromClass);
+			resolve(element);
+		}, 10);
 	})
-		.then(wrapElement => onceTransitionEnd(wrapElement))
-		.then(() => removeDom(this.state.id));
+		.then(el => onceTransitionEnd(el))
+		.then(res => new Promise(resolve => {
+			window.setTimeout(() => {
+				resolve(res);
+			}, time || 3000);
+		}))
+		.then(res => {
+			res.target.classList.remove(this.directionFromClass);
+			return res.target;
+		})
+		.then(el => onceTransitionEnd(el));
 
 	/**
 	 *
-	 * @description 显示弹窗
-	 * @memberof Modal
+	 * @description 移除message
+	 * @memberof Message
 	 */
-	show = () => {
-		const {id} = this.state;
-		const modalElement = document.getElementById(id);
-		return new Promise((resolve, reject) => {
-			const wrapElement = modalElement.querySelector(`.${s.cove}`);
-			if (!modalElement) {
-				reject('未创建或者已移除modal');
-				return;
-			}
-			modalElement.style.display = 'block';
-			window.setTimeout(() => {
-				wrapElement.classList.add(s.coveshow);
-				resolve();
-			}, 10);
-		});
-	}
+	remove = () => {
+		if (!document.getElementById(this.state.id)) {
+			throw '未创建Message';
+		}
+		return removeDom(this.state.id);
+	};
+
 	/**
 	 *
-	 * @description 隐藏弹窗
-	 * @memberof Modal
+	 * @description 显示message
+	 * @memberof Message
+	 */
+	show = (content, time) => {
+		const {id} = this.state;
+		const messageElement = document.getElementById(id);
+		if (!messageElement) {
+			throw '未创建Message';
+		}
+		const boxElement = messageElement.querySelector(`.${s.message}`);
+		const contentElement = messageElement.querySelector(`.${s.messagecontent}`);
+		contentElement.innerHTML = content;
+		return this.animateAction(boxElement, time);
+	}
+
+	/**
+	 *
+	 * @description 隐藏message
+	 * @memberof Message
 	 */
 	unvisible = () => {
 		const {id} = this.state;
-		const modalElement = document.getElementById(id);
+		const messageElement = document.getElementById(id);
 		return new Promise((resolve, reject) => {
-			const wrapElement = modalElement.querySelector(`.${s.cove}`);
-			if (!modalElement) {
-				reject('未创建modal');
+			const boxElement = messageElement.querySelector(`.${s.message}`);
+			if (!messageElement) {
+				reject('未创建Message');
 				return;
 			}
-			wrapElement.classList.remove(s.coveshow);
-			resolve(wrapElement);
+			boxElement.classList.remove(this.directionFromClass);
+			resolve(boxElement);
 		})
-			.then(wrapElement => onceTransitionEnd(wrapElement))
-			.then(() => modalElement.style.display = 'none');
+			.then(boxElement => onceTransitionEnd(boxElement));
 	}
 	
 	/**
-	 * @description 隐藏或移除弹窗
-	 * @param {Boolean} noRemoval 是否移除弹窗，noRemoval=true时仅隐藏当前弹窗而不移除当前弹窗Dom
-	 * @memberof Modal
+	 * @description 隐藏或移除message
+	 * @param {Boolean} noRemoval 是否移除message，noRemoval=true时仅隐藏当前message而不移除当前messageDom
+	 * @memberof Message
 	 */
 	hide = (noRemoval) => {
 		if (noRemoval === true) {
