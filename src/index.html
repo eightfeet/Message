@@ -9,7 +9,7 @@
 <body>
     <div id="example">click me create Message</div>
     <br /><br />
-    <div id="hide">click me hide Message</div>
+    <div id="show">click me show Message</div>
     <br /><br />
     <div id="remove">click me remove Message</div>
 </body>
@@ -18,8 +18,7 @@
         directionFrom: 'top', // 底部位置
         style: { 
             wrap: {
-                // top: 'auto',
-                bottom: '100px'
+                top: 'auto'
             },
             main: {
                 backgroundColor: 'red'
@@ -29,13 +28,15 @@
     var newMessageB = new ___Message___({
         directionFrom: 'top', // 顶部位置
         style: { 
-            wrap: {},
+            wrap: {
+                bottom: '15em'
+            },
             main: {}
         }
     });
 
     var btn = document.getElementById('example');
-    var btnhide = document.getElementById('hide');
+    var btnshow = document.getElementById('show');
     var btnremove = document.getElementById('remove');
 
     function createA(){ 
@@ -50,7 +51,7 @@
         });
     }
 
-    btnhide.onclick = function() {
+    btnshow.onclick = function() {
         newMessageA.show('A');
         newMessageB.show('B');
     }

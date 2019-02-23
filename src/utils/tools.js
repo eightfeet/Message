@@ -43,3 +43,16 @@ export function fixpx(px) {
 	// eslint-disable-next-line no-undef
 	return px ? `${parseFloat(px)/parseFloat(__BASEFONT__)}em`: 0;
 }
+
+export function getMsgTopAndBottom(topPos, bottomPos) {
+	let top = topPos || 'auto';
+	let bottom = bottomPos || 'auto';
+
+	const defauleOffset = '30px';
+
+	if (top ==='auto' && bottom === 'auto' ) {
+		top = defauleOffset;
+	}
+	console.log('66666', top, bottom);
+	return {top, bottom };
+}

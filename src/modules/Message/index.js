@@ -2,7 +2,7 @@
 import s from './Message.scss';
 import { onceTransitionEnd } from 'web-animation-club';
 import { createDom, removeDom } from '~/utils/htmlFactory.js';
-import { inlineStyle } from '~/utils/tools.js';
+import { inlineStyle, getMsgTopAndBottom } from '~/utils/tools.js';
 
 class Message {
 	/**
@@ -38,8 +38,7 @@ class Message {
 	 * @memberof Message
 	 */
 	create = (content, time, noRemoval) => {
-		console.log(noRemoval);
-		const { id, directionFrom, zIndex, style} = this.state;
+		const { id, zIndex, style} = this.state;
 		const { wrap, main } = style || {};
 		let messageElement = document.getElementById(id);
 		if (messageElement) {
@@ -47,7 +46,17 @@ class Message {
 			console.warn('已创建message时 message.create === message.show');
 			return Promise.resolve();
 		}
-		return createDom(`<div class="${s.message}" style="${directionFrom === 'bottom' ? 'bottom' : 'top'}: 30px; ${inlineStyle(wrap)||''}">
+
+		const {top, bottom, ...other} = wrap;
+
+		const msgPosition = getMsgTopAndBottom(top, bottom);
+
+		console.log(msgPosition);
+
+		return createDom(`<div class="${s.message}"
+			style="${inlineStyle(other)||''}
+				top:${msgPosition.top}; bottom:${msgPosition.bottom};
+			">
 				<div class="${s.messagecontent}" style="${inlineStyle(main)||''} z-index: ${zIndex ? zIndex : 10000}; position: static;">
 					${content}
 				</div>
