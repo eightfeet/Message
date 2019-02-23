@@ -37,7 +37,6 @@ function setEmBase (dom) {
 export function createDom(dom, target) {
 	return new Promise((resolve, reject) => {
 		if (!target || !dom) {
-			console.log('666', target);
 			reject('function createDom: params "dom" or "target" not found.');
 			return;
 		}

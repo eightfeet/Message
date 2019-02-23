@@ -51,8 +51,6 @@ class Message {
 
 		const msgPosition = getMsgTopAndBottom(top, bottom);
 
-		console.log(msgPosition);
-
 		return createDom(`<div class="${s.message}"
 			style="${inlineStyle(other)||''}
 				top:${msgPosition.top}; bottom:${msgPosition.bottom};
