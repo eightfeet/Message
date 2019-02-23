@@ -29,7 +29,7 @@ import { prefix } from 'inline-style-prefixer';
  * @returns
  */
 export function inlineStyle(style) {
-	let oprationStyle = prefix(style);
+	let oprationStyle = prefix(style || {});
 	oprationStyle = onProcessStyle(oprationStyle);
 	const keys = Object.keys(oprationStyle);
 	let result = null;

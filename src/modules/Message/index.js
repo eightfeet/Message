@@ -47,7 +47,7 @@ class Message {
 			return Promise.resolve();
 		}
 
-		const {top, bottom, ...other} = wrap;
+		const {top, bottom, ...other} = wrap || {};
 
 		const msgPosition = getMsgTopAndBottom(top, bottom);
 
