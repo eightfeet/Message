@@ -53,6 +53,5 @@ export function getMsgTopAndBottom(topPos, bottomPos) {
 	if (top ==='auto' && bottom === 'auto' ) {
 		top = defauleOffset;
 	}
-	console.log('66666', top, bottom);
 	return {top, bottom };
 }
