@@ -104,13 +104,6 @@ module.exports = (env, argv) => ({
 				exclude: '/node_modules/'
 			},
 			{
-				test: /\.js$/,
-				use: {
-					loader: 'babel-loader'
-				},
-				include: '/node_modules/web-animation-club/dist/'
-			},
-			{
 				test: /\.(scss|css)$/,
 				include: [
 					path.resolve(__dirname, "src/modules")
