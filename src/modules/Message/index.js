@@ -6,7 +6,7 @@ import { inlineStyle, getMsgTopAndBottom } from '~/utils/tools.js';
 
 class Message {
 	/**
-	 *Creates an instance of Modal.
+	 *Creates an instance of message.
 	 * @param { Object } data
 	 * @memberof Message
 	 */
@@ -21,8 +21,8 @@ class Message {
 		} = data || {};
 
 		this.state = {
-			id: id || `modal${stamp}-${window.Math.floor(window.Math.random()*100)}`, // modalId 不传自动生成 modal + 时间戳 + 100以内的随机数
-			zIndex: zIndex || 100, // 层级
+			id: id || `message${stamp}-${window.Math.floor(window.Math.random()*100)}`, // messageId 不传自动生成 message + 时间戳 + 100以内的随机数
+			zIndex: zIndex || 10000, // 层级
 			style: style || null, // 基础样式
 			directionFrom,
 			top
@@ -54,8 +54,9 @@ class Message {
 		return createDom(`<div class="${s.message}"
 			style="${inlineStyle(other)||''}
 				top:${msgPosition.top}; bottom:${msgPosition.bottom};
+				z-index: ${zIndex};
 			">
-				<div class="${s.messagecontent}" style="${inlineStyle(main)||''} z-index: ${zIndex ? zIndex : 10000}; position: static;">
+				<div class="${s.messagecontent}" style="${inlineStyle(main)||''} position: static;">
 					${content}
 				</div>
             </div>`, id)
