@@ -1,6 +1,6 @@
 
 import s from './Message.scss';
-import { onceTransitionEnd } from 'web-animation-club';
+import { onceTransitionEnd } from '~/utils/web-animation-club.js';
 import { createDom, removeDom } from '~/utils/htmlFactory.js';
 import { inlineStyle, getMsgTopAndBottom } from '~/utils/tools.js';
 
