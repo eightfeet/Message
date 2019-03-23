@@ -1,6 +1,6 @@
 {
   "name": "@eightfeet/message",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "",
   "main": "./dist/message.js",
   "files": [
