@@ -1,6 +1,13 @@
+.wrap {
+    position: absolute;
+    width: 100%;
+    pointer-events: none;
+    top: 0;
+}
 .message {
     position: fixed;
     display: inline-block;
+    width: 100%;
     max-width: 80%;
     left: 50%;
     transform: translate(-50%, 0%);
@@ -16,6 +23,7 @@
     color: #eee;
     font-size: 0.8em;
     border-radius: fixpx(10);
+    display: inline-block;
     box-shadow: 0 0 fixpx(5) rgba(0,0,0,0.2);
 }
 

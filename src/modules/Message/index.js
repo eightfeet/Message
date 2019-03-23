@@ -54,15 +54,15 @@ class Message {
 
 		const msgPosition = getMsgTopAndBottom(top, bottom);
 
-		return createDom(`<div class="${s.message}"
-			style="position: ${parentIdDom ? 'relative' : 'fixed'}; ${inlineStyle(other)||''}
+		return createDom(`<div class="${s.wrap}"><div class="${s.message}"
+			style="position: ${parentIdDom ? 'absolute' : 'fixed'}; ${inlineStyle(other)||''}
 				top:${msgPosition.top}; bottom:${msgPosition.bottom};
 				z-index: ${zIndex};
 			">
 				<div class="${s.messagecontent}" style="${inlineStyle(main)||''} position: static;">
 					${content}
 				</div>
-            </div>`, id, parentId)
+            </div></div>`, id, parentId)
 			.then(() => {
 				messageElement = document.getElementById(id);
 				const boxElement = messageElement.querySelector(`.${s.message}`);
