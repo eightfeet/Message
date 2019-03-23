@@ -102,7 +102,8 @@ module.exports = (env, argv) => ({
 					loader: 'babel-loader'
 				},
 				exclude: '/node_modules/'
-			}, {
+			},
+			{
 				test: /\.(scss|css)$/,
 				include: [
 					path.resolve(__dirname, "src/modules")
