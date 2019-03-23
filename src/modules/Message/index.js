@@ -80,7 +80,7 @@ class Message {
 		.then(res => new Promise(resolve => {
 			window.setTimeout(() => {
 				resolve(res);
-			}, time || 30000);
+			}, time || 3000);
 		}))
 		.then(res => {
 			res.target.classList.remove(this.directionFromClass);
