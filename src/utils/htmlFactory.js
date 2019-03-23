@@ -2,22 +2,35 @@
 
 const isPC = !(navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i));
 
+
 /**
  * 设置dom的font-size，用于控制子元素的em基准单位，pc端时 font-size = 16px，
  * 其他按规则计算字体值（屏幕宽度:UI宽度 = 屏幕字体大小:UI字体大小）
  * @param {HTMLElement} dom
+ * @param {String} parentId
  * @returns
  */
-function setEmBase (dom) {
+function setEmBase (dom, parentId) {
 	let docEl = window.document.documentElement;
+	let parEl = window.document.getElementById(parentId);
 	let clientWidth = docEl.clientWidth;
+	let parentWidth = parEl ? parEl.clientWidth : null;
+	const baseFont = parseFloat(__BASEFONT__);
+	const uiWidth = parseFloat(__UIWIDTH__);
+	if (parEl) {
+		if (parentWidth >= uiWidth) {
+			dom.style.fontSize = baseFont + "px";
+		} else {
+			dom.style.fontSize = baseFont * (parentWidth / uiWidth) + "px";
+		}
+		console.log('parEl', dom.style);
+		return;
+	}
 	if (!clientWidth) return;
 	if (isPC) {
 		dom.style.fontSize = '16px';
 		return;
 	}
-	const baseFont = parseFloat(__BASEFONT__);
-	const uiWidth = parseFloat(__UIWIDTH__);
 
 	if (clientWidth >= uiWidth) {
 		dom.style.fontSize = baseFont + "px";
@@ -48,7 +61,7 @@ export function createDom(dom, target, parientId) {
 		}
 		const div = document.createElement('div');
 		div.setAttribute('id', target);
-		setEmBase(div);
+		setEmBase(div, parientId);
 		const parientIdDom = document.getElementById(parientId);
 		if (parientIdDom) {
 			parientIdDom.appendChild(div);
