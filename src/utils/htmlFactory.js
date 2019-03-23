@@ -32,9 +32,10 @@ function setEmBase (dom) {
  * @export
  * @param {HTMLElement} dom (Required) html模板
  * @param {String} target (Required) element id
+ * @param {String} parientId 父级ID
  * @returns
  */
-export function createDom(dom, target) {
+export function createDom(dom, target, parientId) {
 	return new Promise((resolve, reject) => {
 		if (!target || !dom) {
 			reject('function createDom: params "dom" or "target" not found.');
@@ -48,6 +49,14 @@ export function createDom(dom, target) {
 		const div = document.createElement('div');
 		div.setAttribute('id', target);
 		setEmBase(div);
+		const parientIdDom = document.getElementById(parientId);
+		if (parientIdDom) {
+			parientIdDom.appendChild(div);
+			const targetDom = document.getElementById(target);
+			targetDom.innerHTML = dom;
+			resolve();
+			return;
+		}
 		document
 			.body
 			.appendChild(div);

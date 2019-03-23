@@ -17,7 +17,8 @@ class Message {
 			zIndex,
 			style,
 			directionFrom,
-			top
+			top,
+			parentId
 		} = data || {};
 
 		this.state = {
@@ -25,6 +26,7 @@ class Message {
 			zIndex: zIndex || 10000, // 层级
 			style: style || null, // 基础样式
 			directionFrom,
+			parentId,
 			top
 		};
 
@@ -38,7 +40,8 @@ class Message {
 	 * @memberof Message
 	 */
 	create = (content, time, noRemoval) => {
-		const { id, zIndex, style} = this.state;
+		const { id, zIndex, parentId, style} = this.state;
+		const parentIdDom = document.getElementById(parentId);
 		const { wrap, main } = style || {};
 		let messageElement = document.getElementById(id);
 		if (messageElement) {
@@ -52,14 +55,14 @@ class Message {
 		const msgPosition = getMsgTopAndBottom(top, bottom);
 
 		return createDom(`<div class="${s.message}"
-			style="${inlineStyle(other)||''}
+			style="position: ${parentIdDom ? 'relative' : 'fixed'}; ${inlineStyle(other)||''}
 				top:${msgPosition.top}; bottom:${msgPosition.bottom};
 				z-index: ${zIndex};
 			">
 				<div class="${s.messagecontent}" style="${inlineStyle(main)||''} position: static;">
 					${content}
 				</div>
-            </div>`, id)
+            </div>`, id, parentId)
 			.then(() => {
 				messageElement = document.getElementById(id);
 				const boxElement = messageElement.querySelector(`.${s.message}`);
@@ -77,7 +80,7 @@ class Message {
 		.then(res => new Promise(resolve => {
 			window.setTimeout(() => {
 				resolve(res);
-			}, time || 3000);
+			}, time || 30000);
 		}))
 		.then(res => {
 			res.target.classList.remove(this.directionFromClass);
