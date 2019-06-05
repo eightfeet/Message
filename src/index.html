@@ -6,25 +6,43 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Message</title>
     <style>
+        html,body {
+            height: 100%;
+        }
         #example {
             line-height: 40px; background-color: rgb(20, 159, 64); width:260px; margin: 30px auto 10px auto; color: #fff; border-radius: 0.2em; text-align: center;
+        }
+        #show {
+            text-align: center;
+        }
+        #effect {
+            border: 1px solid #eee; padding: 5px; text-align: center
+        }
+        #remove {
+            text-align: center;
+        }
+        #parentId {
+            width: 200px; height: 200px; position: relative;
+        }
+        .center {
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div id="example">click me create Message</div>
-    <br /><br />
-    <div id="show">click me show Message</div>
-    <br /><br />
-    <div id="remove">click me remove Message</div>
-    <div id="parentId" style="width: 200px; height: 200px; position: relative;">
-        <div style="height: 100px; width: 100px">asd</div>
+    <div class="center">
+            direction from &nbsp;&nbsp;<select id="effect">
+            <option value="top">top</option>
+            <option value="bottom">bottom</option>
+        </select>
     </div>
+    <div id="example">click me create Message</div>
+    <br />
+    <div style="text-align: center"><a href="http://www.eightfeet.cn/Modal/">Documents</a></div>
 </body>
 <script>
-    var newMessageA = new ___Message___({
+    var newMessage = new ___Message___({
         directionFrom: 'top', // 底部位置
-        parentId: 'parentId',
         style: { 
             wrap: {
                 top: 'auto'
@@ -34,45 +52,34 @@
             }
         }
     });
-    var newMessageB = new ___Message___({
-        directionFrom: 'buttom', // 顶部位置
-        style: { 
-            wrap: {
-                bottom: '15em'
-            },
-            main: {}
-        }
-    });
 
     var btn = document.getElementById('example');
-    var btnshow = document.getElementById('show');
-    var btnremove = document.getElementById('remove');
+    var effect = 'top';
+    var effectDom = document.getElementById('effect');
+    var fromtop = {top: '10%'};
+    var frombottom = {bottom: '10%'};
 
-    function createA(){ 
-        return newMessageA.create('MA-创建', null, true).then(function(){
-            console.log('do...');
+    effectDom.onchange = function(e) {
+        effect = e.target.value
+    }
+
+    function create(){ 
+        newMessage.state.directionFrom = effect;
+        if (effect === 'top') {
+            newMessage.state.style.wrap = fromtop;
+        }
+
+        if (effect === 'bottom') {
+            newMessage.state.style.wrap = frombottom;
+        }
+        
+        return newMessage.create('message!').then(function(){
+            console.log('then do...');
         });
-    }
-
-    function createB(){ 
-        return newMessageB.create('MB-创建', 50000, true).then(function(){
-            console.log('do...');
-        });
-    }
-
-    btnshow.onclick = function() {
-        newMessageA.show('A');
-        newMessageB.show('B');
-    }
-
-    btnremove.onclick = function() {
-        newMessageA.remove('A');
-        newMessageB.remove('B');
     }
 
     btn.onclick = function(){
-        createB();
-        createA();
+        create();
     }
 
 </script>
