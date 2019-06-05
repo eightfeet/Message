@@ -18,7 +18,8 @@ class Message {
 			style,
 			directionFrom,
 			top,
-			parentId
+			parentId,
+			emBase
 		} = data || {};
 
 		this.state = {
@@ -27,10 +28,9 @@ class Message {
 			style: style || null, // 基础样式
 			directionFrom,
 			parentId,
-			top
+			top,
+			emBase
 		};
-
-		this.directionFromClass = directionFrom === 'top' ? s.messageshowbottom : s.messageshowtop;
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Message {
 	 * @memberof Message
 	 */
 	create = (content, time, noRemoval) => {
-		const { id, zIndex, parentId, style} = this.state;
+		const { id, zIndex, parentId, style, emBase} = this.state;
 		const parentIdDom = document.getElementById(parentId);
 		const { wrap, main } = style || {};
 		let messageElement = document.getElementById(id);
@@ -62,7 +62,7 @@ class Message {
 				<div class="${s.messagecontent}" style="${inlineStyle(main)||''} position: static;">
 					${content}
 				</div>
-            </div></div>`, id, parentId)
+            </div></div>`, id, parentId, emBase)
 			.then(() => {
 				messageElement = document.getElementById(id);
 				const boxElement = messageElement.querySelector(`.${s.message}`);
@@ -70,23 +70,26 @@ class Message {
 			}).then(() => this.hide(noRemoval));
 	}
 
-	animateAction = (element, time) => new Promise(resolve => {
-		window.setTimeout(() => {
-			element.classList.add(this.directionFromClass);
-			resolve(element);
-		}, 10);
-	})
-		.then(el => onceTransitionEnd(el))
-		.then(res => new Promise(resolve => {
+	animateAction = (element, time) => {
+		const directionFromClass = this.state.directionFrom === 'top' ? s.messageshowbottom : s.messageshowtop;
+		return new Promise(resolve => {
 			window.setTimeout(() => {
-				resolve(res);
-			}, time || 3000);
-		}))
-		.then(res => {
-			res.target.classList.remove(this.directionFromClass);
-			return res.target;
+				element.classList.add(directionFromClass);
+				resolve(element);
+			}, 10);
 		})
-		.then(el => onceTransitionEnd(el));
+			.then(el => onceTransitionEnd(el))
+			.then(res => new Promise(resolve => {
+				window.setTimeout(() => {
+					resolve(res);
+				}, time || 3000);
+			}))
+			.then(res => {
+				res.target.classList.remove(directionFromClass);
+				return res.target;
+			})
+			.then(el => onceTransitionEnd(el));
+	};
 
 	/**
 	 *
@@ -123,7 +126,8 @@ class Message {
 	 * @memberof Message
 	 */
 	unvisible = () => {
-		const {id} = this.state;
+		const {id, directionFrom} = this.state;
+		const directionFromClass = directionFrom === 'top' ? s.messageshowbottom : s.messageshowtop;
 		const messageElement = document.getElementById(id);
 		return new Promise((resolve, reject) => {
 			const boxElement = messageElement.querySelector(`.${s.message}`);
@@ -131,7 +135,7 @@ class Message {
 				reject('未创建Message');
 				return;
 			}
-			boxElement.classList.remove(this.directionFromClass);
+			boxElement.classList.remove(directionFromClass);
 			resolve(boxElement);
 		})
 			.then(boxElement => onceTransitionEnd(boxElement));

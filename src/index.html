@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Message</title>
+    <style>
+        #example {
+            line-height: 40px; background-color: rgb(20, 159, 64); width:260px; margin: 30px auto 10px auto; color: #fff; border-radius: 0.2em; text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div id="example">click me create Message</div>
@@ -30,7 +35,7 @@
         }
     });
     var newMessageB = new ___Message___({
-        directionFrom: 'top', // 顶部位置
+        directionFrom: 'buttom', // 顶部位置
         style: { 
             wrap: {
                 bottom: '15em'
@@ -50,14 +55,14 @@
     }
 
     function createB(){ 
-        return newMessageB.create('MB-创建', null, true).then(function(){
+        return newMessageB.create('MB-创建', 50000, true).then(function(){
             console.log('do...');
         });
     }
 
     btnshow.onclick = function() {
         newMessageA.show('A');
-        // newMessageB.show('B');
+        newMessageB.show('B');
     }
 
     btnremove.onclick = function() {
