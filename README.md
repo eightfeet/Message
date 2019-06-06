@@ -1,7 +1,7 @@
 # Message
 
 弱提示模块，需要promise polyfill
-<a href="http://www.eightfeet.cn/Modal/dist/index.html" traget="_blank" >demo</a>
+<a href="http://www.eightfeet.cn/Message/dist/index.html" traget="_blank" >demo</a>
 
 ```sh
 npm i @eightfeet/message -S

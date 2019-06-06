@@ -3,5 +3,5 @@
 .DS_Store
 /coverage
 /.idea
-/dist
+# /dist
 yarn.lock
