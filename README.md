@@ -36,6 +36,8 @@ myMessage.create('A message!').then(() => console.log('已经完成弱提示'));
 
    **content** String 提示内容。
 
+   **time** Number 提示保留时间
+
    **noRemoval** Boolean 关闭弹窗时是否移除message Dom。 false移除，true保留。
 
 2. ##### hide: ƒ (noRemoval) 隐藏弹窗
@@ -72,7 +74,7 @@ const newMessage = new Message({
     const btn = document.getElementById('exampleBtn');
 
     btn.onclick = function(){ 
-        return newMessage.create('Message', true).then(function(){
+        return newMessage.create('Message', null, true).then(function(){
             document.getElementById('btnShow').onclick = function(){
                 return newMessage.show('显示已存在的Message！');
             };
