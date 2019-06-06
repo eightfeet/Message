@@ -48,9 +48,10 @@ myMessage.create('A message!').then(() => console.log('已经完成弱提示'));
 
    移除，将message从body中移除。
 
-4. ##### show: ƒ () 显示弹窗
+4. ##### show: ƒ (content) 显示弹窗
 
-   显示页面弹窗，如果创建的弹窗隐藏时，调用此方法显示弹窗。
+   显示页面Message，如果创建的Message是隐藏而不是移除时，调用此方法显示Message。
+   **content** String 提示内容。
 
 
 
