@@ -72,9 +72,9 @@ const newMessage = new Message({
     const btn = document.getElementById('exampleBtn');
 
     btn.onclick = function(){ 
-        return newModal.create('Message', true).then(function(){
+        return newMessage.create('Message', true).then(function(){
             document.getElementById('btnShow').onclick = function(){
-                return newModal.show('true');
+                return newMessage.show('true');
             };
         });
     }
