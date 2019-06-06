@@ -74,7 +74,7 @@ const newMessage = new Message({
     btn.onclick = function(){ 
         return newMessage.create('Message', true).then(function(){
             document.getElementById('btnShow').onclick = function(){
-                return newMessage.show('true');
+                return newMessage.show('显示已存在的Message！');
             };
         });
     }
