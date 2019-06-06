@@ -17,7 +17,6 @@ class Message {
 			zIndex,
 			style,
 			directionFrom,
-			top,
 			parentId,
 			emBase
 		} = data || {};
@@ -28,7 +27,6 @@ class Message {
 			style: style || null, // 基础样式
 			directionFrom,
 			parentId,
-			top,
 			emBase
 		};
 	}
